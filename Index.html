@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Travel Currency Converter</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="converter-container">
+    <div class="header">
+      <h1>🌍 CNY/DZD Converter</h1>
+      <div class="rate-display" id="rateDisplay">
+        <span>1 USD = 7.2 ¥ (CNY)</span>
+        <span>1 USD = 135 DZD</span>
+      </div>
+      <div class="rate-toggle">
+        <button onclick="toggleRates('official')">Bank Rates</button>
+        <button onclick="toggleRates('parallel')">Street Rates</button>
+      </div>
+    </div>
+    <p class="update-text">Live Rates | Updated May 2025</p>
+
+    <div class="input-group">
+      <div class="currency-flag">🇺🇸</div>
+      <input type="number" id="usdInput" placeholder="USD" oninput="convertCurrency('USD')">
+      <label for="usdInput">US Dollar</label>
+    </div>
+
+    <div class="input-group">
+      <div class="currency-flag">🇨🇳</div>
+      <input type="number" id="cnyInput" placeholder="Yuan" oninput="convertCurrency('CNY')">
+      <label for="cnyInput">Chinese Yuan</label>
+    </div>
+
+    <div class="input-group">
+      <div class="currency-flag">🇩🇿</div>
+      <input type="number" id="dzdInput" placeholder="Dinar" oninput="convertCurrency('DZD')">
+      <label for="dzdInput">Algerian Dinar</label>
+    </div>
+
+    <div class="result" id="result"></div>
+
+    <div class="disclaimer">
+      ⚠️ Street rates for DZD may vary by location.
+    </div>
+
+    <footer>
+      <p>🇨🇳 你好北京! 🇩🇿</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

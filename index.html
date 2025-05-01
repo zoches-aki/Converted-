@@ -2,12 +2,160 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Travel Currency Converter</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CNY/DZD Currency Converter</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Base Styles ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: #f0f2f5;
+    }
+
+    /* ===== Particle Background ===== */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+    }
+
+    /* ===== Converter Container ===== */
+    .converter-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* ===== Header Styles ===== */
+    .header h1 {
+      font-size: 2rem;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+
+    .rate-display {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #4a5568;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    /* ===== Input Groups ===== */
+    .input-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3rem;
+      font-size: 1.1rem;
+      border: 2px solid #3498db;
+      border-radius: 0.8rem;
+      background: white;
+      color: #333;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .input-group input:focus {
+      border-color: #2980b9;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+
+    .currency-flag {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      z-index: 2;
+    }
+
+    .input-group label {
+      display: block;
+      margin: 0.5rem 0 0 1rem;
+      color: #4a5568;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* ===== Rate Toggle ===== */
+    .rate-toggle {
+      margin: 1rem 0;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .rate-toggle button {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 5px;
+      background: #3498db;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: 0.85rem;
+    }
+
+    .rate-toggle button:hover {
+      background: #2980b9;
+    }
+
+    /* ===== Result Display ===== */
+    .result {
+      margin: 2rem 0;
+      padding: 1.2rem;
+      background: #ecf5ff;
+      border-radius: 0.8rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #2980b9;
+      border: 1px solid rgba(52, 152, 219, 0.2);
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      margin-top: 2rem;
+      color: #95a5a6;
+      font-size: 0.85rem;
+    }
+  </style>
 </head>
 <body>
+  <!-- Particle Background Canvas -->
+  <canvas id="particle-canvas"></canvas>
+
   <div class="converter-container">
     <div class="header">
       <h1>🌍 CNY/DZD Converter</h1>
@@ -24,33 +172,166 @@
 
     <div class="input-group">
       <div class="currency-flag">🇺🇸</div>
-      <input type="number" id="usdInput" placeholder="USD" oninput="convertCurrency('USD')">
+      <input type="number" id="usdInput" placeholder="Enter USD" oninput="convertCurrency('USD')">
       <label for="usdInput">US Dollar</label>
     </div>
 
     <div class="input-group">
       <div class="currency-flag">🇨🇳</div>
-      <input type="number" id="cnyInput" placeholder="Yuan" oninput="convertCurrency('CNY')">
+      <input type="number" id="cnyInput" placeholder="Enter CNY" oninput="convertCurrency('CNY')">
       <label for="cnyInput">Chinese Yuan</label>
     </div>
 
     <div class="input-group">
       <div class="currency-flag">🇩🇿</div>
-      <input type="number" id="dzdInput" placeholder="Dinar" oninput="convertCurrency('DZD')">
+      <input type="number" id="dzdInput" placeholder="Enter DZD" oninput="convertCurrency('DZD')">
       <label for="dzdInput">Algerian Dinar</label>
     </div>
 
     <div class="result" id="result"></div>
-
-    <div class="disclaimer">
-      ⚠️ Street rates for DZD may vary by location.
-    </div>
 
     <footer>
       <p>🇨🇳 你好北京! 🇩🇿</p>
     </footer>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    // May 2025 rates (USD/CNY/DZD)
+    const rates = {
+      official: {
+        USD: { CNY: 7.2, DZD: 135 },
+        CNY: { USD: 1/7.2, DZD: (1/7.2)*135 },
+        DZD: { USD: 1/135, CNY: (1/135)*7.2 }
+      },
+      parallel: {
+        USD: { CNY: 7.2, DZD: 220 },
+        CNY: { USD: 1/7.2, DZD: (1/7.2)*220 },
+        DZD: { USD: 1/220, CNY: (1/220)*7.2 }
+      }
+    };
+
+    let currentRateType = 'official';
+
+    function toggleRates(type) {
+      currentRateType = type;
+      const rateDisplay = document.getElementById('rateDisplay');
+      if (type === 'official') {
+        rateDisplay.innerHTML = '<span>1 USD = 7.2 ¥ (CNY)</span><span>1 USD = 135 DZD</span>';
+      } else {
+        rateDisplay.innerHTML = '<span>1 USD = 7.2 ¥ (CNY)</span><span>1 USD = 220 DZD</span>';
+      }
+      convertCurrency(document.activeElement.id.replace('Input', ''));
+    }
+
+    function convertCurrency(source) {
+      const inputs = {
+        USD: document.getElementById('usdInput'),
+        CNY: document.getElementById('cnyInput'),
+        DZD: document.getElementById('dzdInput')
+      };
+
+      const sourceValue = parseFloat(inputs[source].value);
+      
+      if (isNaN(sourceValue)) {
+        clearInputs();
+        return;
+      }
+
+      const rateSet = rates[currentRateType];
+
+      switch(source) {
+        case 'USD':
+          inputs.CNY.value = (sourceValue * rateSet.USD.CNY).toFixed(2);
+          inputs.DZD.value = (sourceValue * rateSet.USD.DZD).toFixed(2);
+          break;
+        case 'CNY':
+          inputs.USD.value = (sourceValue * rateSet.CNY.USD).toFixed(2);
+          inputs.DZD.value = (sourceValue * rateSet.CNY.DZD).toFixed(2);
+          break;
+        case 'DZD':
+          inputs.USD.value = (sourceValue * rateSet.DZD.USD).toFixed(2);
+          inputs.CNY.value = (sourceValue * rateSet.DZD.CNY).toFixed(2);
+          break;
+      }
+
+      updateResult(source, sourceValue);
+    }
+
+    function updateResult(source, value) {
+      const result = document.getElementById('result');
+      const usd = document.getElementById('usdInput').value || "0";
+      const cny = document.getElementById('cnyInput').value || "0";
+      const dzd = document.getElementById('dzdInput').value || "0";
+
+      result.innerHTML = `
+        ${value} ${source} =<br>
+        <span>${usd} USD</span> | 
+        <span>${cny} ¥</span> | 
+        <span>${dzd} DZD</span>
+      `;
+    }
+
+    function clearInputs() {
+      document.getElementById('usdInput').value = '';
+      document.getElementById('cnyInput').value = '';
+      document.getElementById('dzdInput').value = '';
+      document.getElementById('result').innerHTML = '';
+    }
+
+    // Particle background animation
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const particleCount = window.innerWidth < 600 ? 30 : 60;
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = Math.random() * 2 - 1;
+        this.speedY = Math.random() * 2 - 1;
+        this.color = `hsl(${Math.random() * 60 + 180}, 70%, 60%)`;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+        if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+      }
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    initParticles();
+    animateParticles();
+  </script>
 </body>
 </html>
